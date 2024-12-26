@@ -22,11 +22,6 @@ app.use(
   })
 );
 
-app.use((req, res, next) => {
-  console.log(`[${req.method}] ${req.path}`);
-  next();
-});
-
 app.use("/api/posts", postRoutes);
 app.use("/api/users", userRoutes);
 app.use("/api/auth", authRoutes);
