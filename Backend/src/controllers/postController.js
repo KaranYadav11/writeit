@@ -64,6 +64,63 @@ export const createPost = async (req, res) => {
     res.status(500).json({ error: "Internal server error" });
   }
 };
+export const updatePost = async (req, res) => {
+  const { slug } = req.params;
+  const { title, content, desc, category, img } = req.body;
+
+  try {
+    if (!req.body.title || !req.body.content || !req.body.desc) {
+      return res.status(400).json({ error: "All fields are requiredxx" });
+    }
+    // Find the post to update
+    const post = await Post.findOne({ slug });
+
+    if (!post) {
+      return res.status(404).json({ error: "Post does not exist" });
+    }
+
+    // Check if the authenticated user is the owner of the post
+    if (post.user.toString() !== req.user._id.toString()) {
+      return res
+        .status(403)
+        .json({ error: "You are not authorized to update this post" });
+    }
+
+    // Update the fields
+    if (title) {
+      let newSlug = title.replace(/\s+/g, "-").toLowerCase();
+
+      // Check if the new slug already exists
+      let existingPost = await Post.findOne({ slug: newSlug });
+      let count = 2;
+
+      while (
+        existingPost &&
+        existingPost._id.toString() !== post._id.toString()
+      ) {
+        newSlug = `${newSlug}-${count}`;
+        existingPost = await Post.findOne({ slug: newSlug });
+        count++;
+      }
+
+      post.slug = newSlug;
+    }
+    if (title) post.title = title;
+    if (content) post.content = content;
+    if (desc) post.desc = desc;
+    if (category) post.category = category;
+    if (img) post.img = img;
+
+    // Save the updated post
+    await post.save();
+
+    res.status(200).json(post);
+  } catch (error) {
+    console.error("Error in updatePost Controller:", error.message);
+    res.status(500).json({ error: "Internal server error" });
+  }
+};
+
 export const deletePost = async (req, res) => {
   try {
     const { id } = req.params;

@@ -1,5 +1,4 @@
 // import Navbar from "./components/Navbar";
-// import "prismjs/themes/prism-tomorrow.css";
 
 // const App = () => {
 //   return (

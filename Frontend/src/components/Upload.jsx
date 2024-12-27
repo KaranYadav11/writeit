@@ -1,6 +1,7 @@
 import { IKContext, IKUpload } from "imagekitio-react";
 import { axiosInstance } from "../lib/axiosInstance";
 import { useRef } from "react";
+import { toast } from "react-toastify";
 
 const authenticator = async () => {
   try {
@@ -31,11 +32,11 @@ const Upload = ({ children, type, setProgress, setData }) => {
         ref={ref}
         useUniqueFileName={true}
         onError={(err) => {
-          console.log(err);
+          toast.error(err);
         }}
         onSuccess={(res) => {
           setData(res);
-          console.log(res);
+          toast.success("Image uploaded");
         }}
         onUploadProgress={(progress) => {
           setProgress(Math.round(progress.loaded / progress.total) * 100);

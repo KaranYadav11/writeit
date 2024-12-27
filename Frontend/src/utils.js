@@ -42,6 +42,20 @@ export const createPostRequest = async (credentials) => {
     );
   }
 };
+export const updatePostRequest = async ({ updatedData, slug }) => {
+  try {
+    const { data } = await axiosInstance.put(`/posts/${slug}`, updatedData, {
+      withCredentials: true,
+    });
+    return data;
+  } catch (error) {
+    throw new Error(
+      error.response?.data?.error ||
+        error.message ||
+        "An error occurred while updating the post"
+    );
+  }
+};
 
 export const fetchPostRequest = async (slug) => {
   try {

@@ -17,7 +17,7 @@ function LoginPage() {
     if (isError) {
       const timer = setTimeout(() => {
         resetLogin();
-      }, 2100);
+      }, 1500);
       return () => clearTimeout(timer);
     }
   }, [isError, useLoginError, resetLogin]);
@@ -86,7 +86,7 @@ function LoginPage() {
                   <Mail className="size-5  text-white" />
                 </div>
                 <input
-                  value={form.email}
+                  value={form.email.toLowerCase()}
                   spellCheck="false"
                   type="text"
                   className={`outline-none text-white font-normal bg-black border-2 border-white placeholder:text-white p-2 rounded-3xl w-full pl-10`}

@@ -1,24 +1,54 @@
 import "react-quill/dist/quill.snow.css";
 import ReactQuill from "react-quill";
-import { useEffect, useState } from "react";
+import { useEffect, useMemo, useState } from "react";
 import { useCreatePost } from "../hooks/useCreatePost.js";
 import { Loader2 } from "lucide-react";
 import Upload from "../components/Upload.jsx";
 import { motion } from "framer-motion";
+import { useUpdatePost } from "../hooks/useUpdatePost.js";
+import hljs from "highlight.js";
+import "highlight.js/styles/night-owl.css";
 
-const Write = () => {
-  const [cover, setCover] = useState({});
+const Write = ({ post }) => {
+  const [cover, setCover] = useState(post?.img ? { filePath: post.img } : {});
   const [progress, setProgress] = useState(0);
+
+  const modules = useMemo(
+    () => ({
+      toolbar: [
+        [{ header: [1, 2, 3, false] }],
+
+        ["bold", "italic", "underline"],
+
+        ["link"],
+
+        [{ list: "ordered" }, { list: "bullet" }],
+        [{ align: [] }],
+        [{ "code-block": true }],
+      ],
+      syntax: {
+        highlight: (text) => hljs.highlightAuto(text).value,
+      },
+    }),
+    []
+  );
 
   const {
     mutate: createPost,
+    isLoading,
     isError,
-    isFetching,
     error: createPostError,
     reset: resetCreatePost,
-    isLoading,
   } = useCreatePost();
-  const [value, setValue] = useState("");
+
+  const {
+    mutate: updatePost,
+    isLoading: isUpdating,
+    reset: resetUpdatePost,
+    isError: isUpdateError,
+    error: updatePostError,
+  } = useUpdatePost();
+  const [value, setValue] = useState(post?.content || "");
 
   const handleSubmit = (e) => {
     e.preventDefault();
@@ -32,17 +62,29 @@ const Write = () => {
       content: value,
     };
 
-    createPost(data);
+    if (post) {
+      updatePost({ updatedData: data, slug: post.slug });
+    } else {
+      createPost(data);
+    }
   };
 
   useEffect(() => {
-    if (isError) {
+    if (isError || isUpdateError) {
       const timer = setTimeout(() => {
         resetCreatePost();
-      }, 2100);
+        resetUpdatePost();
+      }, 1500);
       return () => clearTimeout(timer);
     }
-  }, [isError, createPostError, resetCreatePost]);
+  }, [
+    isError,
+    isUpdateError,
+    resetUpdatePost,
+    updatePostError,
+    createPostError,
+    resetCreatePost,
+  ]);
 
   return (
     <div className="h-[calc(100vh-64px)] md:h-[calc(100vh-80px)] flex flex-col gap-6">
@@ -53,7 +95,7 @@ const Write = () => {
         animate={{ opacity: 1 }}
         transition={{ duration: 0.5 }}
       >
-        Create a New Post
+        {post ? "Edit Post" : "Write a Post"}
       </motion.h1>
 
       {/* Form Section with Slide In animation */}
@@ -78,14 +120,20 @@ const Write = () => {
             </motion.button>
           </Upload>
           <p className="text-white text-sm font-light">
-            {progress === 100 ? "Uploaded ✓" : `Uploading ${progress}%`}
+            {cover.filePath
+              ? cover.filePath
+              : progress === 100
+              ? "Uploaded ✓"
+              : `Uploading ${progress}%`}
           </p>
         </div>
 
         {/* Title Input with Fade-in animation */}
         <motion.input
+          spellCheck="false"
           className="text-4xl font-semibold bg-transparent placeholder:text-white/60 outline-none"
           type="text"
+          defaultValue={post?.title || ""}
           placeholder="My Post's Title"
           name="title"
           initial={{ opacity: 0 }}
@@ -104,6 +152,7 @@ const Write = () => {
             Choose a category :
           </label>
           <select
+            defaultValue={post?.category || "general"}
             name="category"
             className="p-2 rounded-xl outline-none bg-white/20 shadow-md"
           >
@@ -132,6 +181,8 @@ const Write = () => {
         <motion.textarea
           className="p-4 rounded-xl placeholder:text-white/60 bg-white/20 outline-none shadow-md"
           name="desc"
+          spellCheck="false"
+          defaultValue={post?.desc || ""}
           placeholder="A Short Description"
           initial={{ opacity: 0 }}
           animate={{ opacity: 1 }}
@@ -150,27 +201,41 @@ const Write = () => {
             className="flex-1 rounded-xl text-black bg-white/80 shadow-md"
             value={value}
             onChange={setValue}
+            modules={modules}
+            placeholder="Write something amazing..."
+            // style={{ height: "calc(100vh - 64px - 2rem - 4rem)" }}
           />
         </motion.div>
 
         {/* Submit Button with Pulse effect */}
         <motion.button
-          disabled={isError || isLoading || (0 < progress && progress < 100)}
+          disabled={
+            isError ||
+            isUpdateError ||
+            isLoading ||
+            isUpdating ||
+            (0 < progress && progress < 100)
+          }
           className={`${
-            isError ? "bg-red-700" : "bg-white/95"
+            isError || isUpdateError ? "bg-red-700" : "bg-white/95"
           } text-black font-inter rounded-full md:mt-4 p-2 md:min-w-36 w-full font-medium z-20 disabled:cursor-not-allowed`}
           whileHover={{ scale: 1.05 }}
           whileTap={{ scale: 0.98 }}
           transition={{ duration: 0.2 }}
         >
-          {isLoading ? (
+          {isLoading || isUpdating ? (
             <div className="flex flex-col items-center justify-center">
               <p className="flex animate-spin items-center justify-center">
                 <Loader2 />
               </p>
             </div>
-          ) : isError ? (
-            createPostError?.response?.data?.error || createPostError?.message
+          ) : isError || isUpdateError ? (
+            createPostError?.response?.data?.error ||
+            createPostError?.message ||
+            updatePostError?.response?.data?.error ||
+            updatePostError?.message
+          ) : post ? (
+            "Update Post"
           ) : (
             "Post"
           )}

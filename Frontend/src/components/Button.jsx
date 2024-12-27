@@ -1,9 +1,9 @@
-import { Bookmark, Trash } from "lucide-react";
+import { Bookmark, Edit2, SquarePen, Trash } from "lucide-react";
 import { motion } from "motion/react";
 import { useSelector } from "react-redux";
 import { useDeletePost } from "../hooks/useDeletePost";
 import { useSavePost } from "../hooks/useSavePost";
-import { useNavigate } from "react-router-dom";
+import { Link, useNavigate } from "react-router-dom";
 import { useSavedPosts } from "../hooks/useGetSavedPosts.js";
 
 function Button({ data }) {
@@ -54,6 +54,15 @@ function Button({ data }) {
           >
             <Trash />
           </button>
+        )}
+        {isAuthor && (
+          <Link
+            disabled={isDeletePending}
+            to={`/update/${data?.slug}`}
+            className="bg-white text-black  py-2 px-4  rounded-full"
+          >
+            <SquarePen />
+          </Link>
         )}
       </motion.div>
       <motion.div

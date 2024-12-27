@@ -2,9 +2,33 @@
 @tailwind components;
 @tailwind utilities;
 
-/* * {
-  overflow-x: hidden;
-} */
+.ql-editor h1 {
+  margin-bottom: 1.5rem !important; /* Margin for headings */
+}
+.ql-editor h2 {
+  margin-bottom: 1.5rem !important; /* Margin for headings */
+}
+.ql-editor h3 {
+  margin: 1.5rem 0 !important; /* Margin for headings */
+}
+.ql-editor p {
+  margin: 1rem 0 !important; /* Margin for headings */
+}
+.ql-editor pre {
+  padding: 15px !important;
+  margin: 10px 0 !important;
+  border-radius: 10px;
+  overflow-x: auto;
+  font-size: 1rem;
+}
+
+.ql-editor code {
+  background-color: #011627;
+  color: #d6deeb;
+  font-family: "Courier New", Courier, monospace;
+  font-size: 1rem;
+}
+
 body {
   background-color: #000000;
   color: #ffffff;

@@ -61,7 +61,6 @@ function PostListItem({ post }) {
             {post?.title}
           </Link>
         </motion.div>
-
         <motion.div
           className="flex items-center gap-2 text-xs text-gray-400 xl:text-xs"
           initial={{ opacity: 0, y: 15 }}
@@ -73,10 +72,10 @@ function PostListItem({ post }) {
             ease: "easeOut",
           }}
         >
-          <span className="text-white/70 lg:-tracking-normal tracking-tighter">
+          <span className="text-white/70 truncate lg:-tracking-normal tracking-tighter">
             Written By
           </span>
-          <Link className="text-white/80 lg:-tracking-normal font-semibold tracking-tighter">
+          <Link className="text-white/80 truncate lg:-tracking-normal font-semibold tracking-tighter">
             {post?.user?.fullName}
           </Link>
           <span className="text-white/70 lg:-tracking-normal tracking-tighter">
@@ -85,7 +84,7 @@ function PostListItem({ post }) {
           <Link className="text-white/80 lg:-tracking-normal tracking-tighter font-semibold">
             {post?.category}
           </Link>
-          <span className="text-white/70 lg:-tracking-normal tracking-tighter">
+          <span className="text-white/70 lg:-tracking-normal truncate tracking-tighter">
             {format(post?.createdAt)}
           </span>
         </motion.div>

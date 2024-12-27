@@ -16,6 +16,7 @@ import { QueryClient, QueryClientProvider } from "@tanstack/react-query";
 import ProtectedRoute from "./components/ProtectedRoute.jsx";
 import ProtectedWrite from "./components/ProtectedWrite.jsx";
 import SavedPostPage from "./pages/SavedPostPage.jsx";
+import UpdatePostPage from "./pages/UpdatePostPage.jsx";
 
 const queryClient = new QueryClient();
 
@@ -56,6 +57,14 @@ const router = createBrowserRouter([
         element: (
           <ProtectedWrite>
             <SavedPostPage />
+          </ProtectedWrite>
+        ),
+      },
+      {
+        path: "/update/:slug",
+        element: (
+          <ProtectedWrite>
+            <UpdatePostPage />
           </ProtectedWrite>
         ),
       },

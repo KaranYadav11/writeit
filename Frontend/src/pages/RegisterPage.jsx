@@ -64,7 +64,7 @@ function RegisterPage() {
     if (isError) {
       const timer = setTimeout(() => {
         resetRegister();
-      }, 2100);
+      }, 1500);
       return () => clearTimeout(timer); // Cleanup on unmount or on next error
     }
   }, [isError, resetRegister]); // Only run when isError changes
