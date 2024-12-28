@@ -91,7 +91,9 @@ function LoginPage() {
                   type="text"
                   className={`outline-none text-white font-normal bg-black border-2 border-white placeholder:text-white p-2 rounded-3xl w-full pl-10`}
                   placeholder="you@example.com"
-                  onChange={(e) => setForm({ ...form, email: e.target.value })}
+                  onChange={(e) =>
+                    setForm({ ...form, email: e.target.value.toLowerCase() })
+                  }
                 />
               </div>
               <div className=" h-4 w-full text-xs font-medium tracking-wide text-center text-[#1DA1F2]">

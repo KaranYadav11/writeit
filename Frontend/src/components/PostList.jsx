@@ -7,21 +7,13 @@ import { AnimatePresence } from "motion/react";
 
 const fetchPosts = async (pageParam) => {
   const res = await axiosInstance.get(`/posts`, {
-    params: { page: pageParam, limit: 3 },
+    params: { page: pageParam, limit: 5 },
   });
   return res.data;
 };
 
 const PostList = () => {
-  const {
-    data,
-    error,
-    fetchNextPage,
-    hasNextPage,
-    isFetching,
-    // isFetchingNextPage,
-    status,
-  } = useInfiniteQuery({
+  const { data, error, fetchNextPage, hasNextPage, status } = useInfiniteQuery({
     queryKey: ["posts"],
 
     queryFn: ({ pageParam = 1 }) => fetchPosts(pageParam),
@@ -61,11 +53,6 @@ const PostList = () => {
       }
     >
       <>
-        {isFetching && (
-          <p className="lg:my-8 my-4 text-center  text-lg lg:text-xl font-montserrat text-zinc-600">
-            Updating...
-          </p>
-        )}
         <AnimatePresence>
           {allPosts.map((post) => (
             <PostListItem key={post?._id} post={post} />

@@ -7,7 +7,6 @@ import Write from "./pages/Write";
 import RegisterPage from "./pages/RegisterPage";
 import LoginPage from "./pages/LoginPage";
 import SinglePostPage from "./pages/SinglePostPage";
-import PostListPage from "./pages/PostListPage";
 import MainLayout from "./layouts/MainLayout.jsx";
 import store, { persistor } from "./redux/store.js";
 import { Provider } from "react-redux";
@@ -47,10 +46,6 @@ const router = createBrowserRouter([
       {
         path: "/:slug",
         element: <SinglePostPage />,
-      },
-      {
-        path: "/posts",
-        element: <PostListPage />,
       },
       {
         path: "/savedposts",

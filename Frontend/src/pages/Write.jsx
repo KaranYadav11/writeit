@@ -203,7 +203,6 @@ const Write = ({ post }) => {
             onChange={setValue}
             modules={modules}
             placeholder="Write something amazing..."
-            // style={{ height: "calc(100vh - 64px - 2rem - 4rem)" }}
           />
         </motion.div>
 

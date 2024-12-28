@@ -1,4 +1,4 @@
-import { Bookmark, Edit2, SquarePen, Trash } from "lucide-react";
+import { Bookmark, SquarePen, Trash } from "lucide-react";
 import { motion } from "motion/react";
 import { useSelector } from "react-redux";
 import { useDeletePost } from "../hooks/useDeletePost";

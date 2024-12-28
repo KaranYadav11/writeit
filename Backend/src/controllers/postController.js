@@ -7,7 +7,7 @@ dotenv.config();
 export const getPosts = async (req, res) => {
   try {
     const page = parseInt(req.query.page) || 1;
-    const limit = parseInt(req.query.limit) || 2;
+    const limit = parseInt(req.query.limit) || 5;
 
     const posts = await Post.find()
       .limit(limit)
@@ -72,25 +72,22 @@ export const updatePost = async (req, res) => {
     if (!req.body.title || !req.body.content || !req.body.desc) {
       return res.status(400).json({ error: "All fields are requiredxx" });
     }
-    // Find the post to update
+
     const post = await Post.findOne({ slug });
 
     if (!post) {
       return res.status(404).json({ error: "Post does not exist" });
     }
 
-    // Check if the authenticated user is the owner of the post
     if (post.user.toString() !== req.user._id.toString()) {
       return res
         .status(403)
         .json({ error: "You are not authorized to update this post" });
     }
 
-    // Update the fields
     if (title) {
       let newSlug = title.replace(/\s+/g, "-").toLowerCase();
 
-      // Check if the new slug already exists
       let existingPost = await Post.findOne({ slug: newSlug });
       let count = 2;
 
@@ -111,7 +108,6 @@ export const updatePost = async (req, res) => {
     if (category) post.category = category;
     if (img) post.img = img;
 
-    // Save the updated post
     await post.save();
 
     res.status(200).json(post);

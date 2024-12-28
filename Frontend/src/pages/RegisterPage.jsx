@@ -65,9 +65,9 @@ function RegisterPage() {
       const timer = setTimeout(() => {
         resetRegister();
       }, 1500);
-      return () => clearTimeout(timer); // Cleanup on unmount or on next error
+      return () => clearTimeout(timer);
     }
-  }, [isError, resetRegister]); // Only run when isError changes
+  }, [isError, resetRegister]);
 
   const handleSubmit = (e) => {
     e.preventDefault();
@@ -127,12 +127,14 @@ function RegisterPage() {
                   <Mail className="size-5  text-white" />
                 </div>
                 <input
-                  value={form.email}
+                  value={form.email.toLowerCase()}
                   spellCheck="false"
                   type="text"
                   className={`outline-none text-white font-normal bg-black border-2 border-white placeholder:text-white p-2 rounded-3xl w-full pl-10`}
                   placeholder="you@example.com"
-                  onChange={(e) => setForm({ ...form, email: e.target.value })}
+                  onChange={(e) =>
+                    setForm({ ...form, email: e.target.value.toLowerCase() })
+                  }
                 />
               </div>
               <div className=" h-4 w-full text-xs font-medium tracking-wide text-center text-[#1DA1F2]">

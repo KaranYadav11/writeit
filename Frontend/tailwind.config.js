@@ -16,10 +16,3 @@ export default {
   },
   plugins: [typography, tailwindScrollbarHide],
 };
-
-// Main text: #f5f5f5 (off-white)
-// Headings: #e0e0e0 (light gray)
-// Subheadings: #dcdcdc (gainsboro)
-// Links/Buttons: #ffffff (pure white) or a vibrant accent color (like teal or blue)
-// Footer or less important text: #b0b0b0 (lighter gray)
-// #1DA1F2:
